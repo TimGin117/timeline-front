@@ -9,14 +9,14 @@ const { Footer, Sider, Content } = Layout;
 
 ReactDOM.render(
   <Layout>
-    <Sider width="150" theme="light" className="sider"></Sider>
+    <Sider width="250" theme="light" className="sider"></Sider>
     <Layout>
       <Content>
         <App />
       </Content>
       <Footer className="footer">TimeLine ©2019 Created by Ecnu Coder</Footer>
     </Layout>
-    <Sider width="150" theme="light" className="sider"></Sider>
+    <Sider width="250" theme="light" className="sider"></Sider>
   </Layout>,
   document.getElementById("root")
 );

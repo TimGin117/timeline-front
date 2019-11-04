@@ -5,7 +5,7 @@ import { List, Avatar, Button, Skeleton } from "antd";
 
 import reqwest from "reqwest";
 
-const count = 3;
+const count = 6;
 const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat&noinfo`;
 
 class App extends React.Component {
@@ -34,7 +34,6 @@ class App extends React.Component {
       contentType: "application/json",
       success: res => {
         alert(JSON.stringify(res));
-        console.log(JSON.stringify(res));
         callback(res);
       }
     });
@@ -52,7 +51,11 @@ class App extends React.Component {
     this.setState({
       loading: true,
       list: this.state.data.concat(
-        [...new Array(count)].map(() => ({ loading: true, name: {} }))
+        [...new Array(count)].map(() => ({
+          loading: true,
+          name: {},
+          email: {}
+        })) //直接new Array(count).map()无效，hasOwnProperty false
       )
     });
     this.getData(res => {
@@ -73,7 +76,36 @@ class App extends React.Component {
     });
   };
 
-  onUpdate = () => {};
+  onUpdate = () => {
+    this.setState({
+      loading: true,
+      list: [...new Array(count)]
+        .map(() => ({
+          loading: true,
+          name: {},
+          email: {}
+        }))
+        .concat(this.state.data)
+    });
+
+    this.getData(res => {
+      const data = res.results.concat(this.state.data);
+      this.setState(
+        {
+          data,
+          list: data,
+          loading: false
+        },
+        () => {
+          // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
+          // In real scene, you can using public method of react-virtualized:
+          // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
+          window.dispatchEvent(new Event("resize"));
+        }
+      );
+    });
+  };
+
   render() {
     const { initLoading, loading, list } = this.state;
     const loadMore =
