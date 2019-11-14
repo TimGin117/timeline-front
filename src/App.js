@@ -267,19 +267,28 @@ class App extends React.Component {
                           fontSize: "12px"
                         }}
                       >
-                        作者：{item.publisher}&nbsp;&nbsp;&nbsp;&nbsp;
+                        作者：{item.publisher}&#12288;&#12288; 发布于：
                         {timestampFormat(item.publishTime)}
+                      </div>
+                      <div
+                        style={{
+                          textAlign: "left",
+                          fontSize: "16px",
+                          fontWeight: 800
+                        }}
+                      >
+                        {item.title}
                       </div>
                       <div
                         style={{
                           textAlign: "left"
                         }}
                       >
-                        标题：{item.title}
+                        &#12288;&#12288;{item.content}
                       </div>
                     </div>
                   }
-                  description={item.content}
+                  // description={item.content}
                 />
 
                 <div className="picture">

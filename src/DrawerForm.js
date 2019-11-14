@@ -38,9 +38,8 @@ class DrawerForm extends React.Component {
     e.preventDefault();
 
     this.props.form.validateFields((err, values) => {
-      console.log(this.pictureRef.current.state);
-      console.log(this.fileUploadRef.current.state);
-      console.log(this.fileInput.current.files[0]);
+      // console.log(this.pictureRef.current.state);
+      // console.log(this.fileUploadRef.current.state);
 
       let formData = new FormData();
       formData.append("publisher", values.publisher);
@@ -65,7 +64,7 @@ class DrawerForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <div>
+      <div className="post-button">
         <Button type="primary" onClick={this.showDrawer}>
           <Icon type="plus" /> New Post
         </Button>

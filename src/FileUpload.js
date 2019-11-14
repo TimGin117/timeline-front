@@ -19,7 +19,10 @@ export default class FileUpload extends React.Component {
       },
       onChange: info => {
         this.setState({
-          file: info.file
+          file:
+            info.fileList.length === 0
+              ? this.state.file
+              : info.fileList[0].originFileObj
         });
         if (info.file.status !== "uploading") {
           console.log(info.file, info.fileList);
@@ -32,7 +35,7 @@ export default class FileUpload extends React.Component {
       }
     };
     return (
-      <Upload {...uploadFile}>
+      <Upload ref={this.uploadRef} {...uploadFile}>
         <Button>
           <Icon type="upload" /> Click to Upload
         </Button>
