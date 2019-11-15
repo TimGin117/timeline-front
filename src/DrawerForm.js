@@ -2,7 +2,7 @@ import React from "react";
 import "antd/dist/antd.css";
 import "./index.css";
 import { Drawer, Form, Button, Col, Row, Input, Icon } from "antd";
-import PicturesWall from "./PicturesWall";
+import PictureUpload from "./PictureUpload";
 import FileUpload from "./FileUpload";
 
 const { TextArea } = Input;
@@ -18,7 +18,7 @@ class DrawerForm extends React.Component {
     super(props);
 
     this.fileUploadRef = React.createRef();
-    this.pictureRef = React.createRef();
+    this.pictureUploadRef = React.createRef();
     this.fileInput = React.createRef();
   }
 
@@ -38,14 +38,16 @@ class DrawerForm extends React.Component {
     e.preventDefault();
 
     this.props.form.validateFields((err, values) => {
-      // console.log(this.pictureRef.current.state);
-      // console.log(this.fileUploadRef.current.state);
+      console.log(this.pictureUploadRef.current.state);
+      console.log(this.fileUploadRef.current.state);
 
       let formData = new FormData();
+      let photo = this.pictureUploadRef.current.state.file;
+      let file = this.fileUploadRef.current.state.fileList[0];
       formData.append("publisher", values.publisher);
       formData.append("title", values.title);
       formData.append("content", values.content);
-      formData.append("photo", this.pictureRef.current.state.file);
+      formData.append("photo", photo);
 
       if (!err) {
         fetch(baseURL, {
@@ -55,6 +57,20 @@ class DrawerForm extends React.Component {
           .then(res => res.json())
           .then(JsonRes => {
             console.log(JsonRes);
+            console.log(file);
+            if (JsonRes.code === 0 && file) {
+              let formData = new FormData();
+              formData.append("file", file);
+              formData.append("newsId", JsonRes.data.id);
+              fetch(baseURL + "File", {
+                method: "POST",
+                body: formData
+              })
+                .then(res => res.json())
+                .then(JsonRes => {
+                  console.log(JsonRes);
+                });
+            }
             this.onClose();
           });
       }
@@ -118,7 +134,9 @@ class DrawerForm extends React.Component {
                 <Form.Item label="photo">
                   {getFieldDecorator("photo", {
                     rules: [{ required: false }]
-                  })(<PicturesWall ref={this.pictureRef}></PicturesWall>)}
+                  })(
+                    <PictureUpload ref={this.pictureUploadRef}></PictureUpload>
+                  )}
                 </Form.Item>
               </Col>
               <Col span={6}>

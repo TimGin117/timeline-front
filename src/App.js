@@ -298,6 +298,9 @@ class App extends React.Component {
                     src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
                     alt=""
                   />
+                  {item.fileDownloadUrl ? (
+                    <a href={item.fileDownloadUrl}>下载附件</a>
+                  ) : null}
                 </div>
               </Skeleton>
             </List.Item>

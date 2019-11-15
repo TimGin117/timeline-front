@@ -7,35 +7,32 @@ import { Upload, message, Button, Icon } from "antd";
 
 export default class FileUpload extends React.Component {
   state = {
-    file: {}
+    fileList: []
   };
 
   render() {
-    const uploadFile = {
-      name: "file",
-      action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-      headers: {
-        authorization: "authorization-text"
-      },
-      onChange: info => {
-        this.setState({
-          file:
-            info.fileList.length === 0
-              ? this.state.file
-              : info.fileList[0].originFileObj
+    const fileList = this.state.fileList;
+    const props = {
+      onRemove: file => {
+        this.setState(state => {
+          const index = state.fileList.indexOf(file);
+          const newFileList = state.fileList.slice();
+          newFileList.splice(index, 1);
+          return {
+            fileList: newFileList
+          };
         });
-        if (info.file.status !== "uploading") {
-          console.log(info.file, info.fileList);
-        }
-        if (info.file.status === "done") {
-          message.success(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === "error") {
-          message.error(`${info.file.name} file upload failed.`);
-        }
-      }
+      },
+      beforeUpload: file => {
+        this.setState(state => ({
+          fileList: [...state.fileList, file]
+        }));
+        return false;
+      },
+      fileList
     };
     return (
-      <Upload ref={this.uploadRef} {...uploadFile}>
+      <Upload {...props}>
         <Button>
           <Icon type="upload" /> Click to Upload
         </Button>
